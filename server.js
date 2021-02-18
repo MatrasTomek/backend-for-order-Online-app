@@ -10,15 +10,15 @@ mongoose.connect(config.db, {
   useUnifiedTopology: true,
 });
 
-// const formsRoutes = require("./routes/forms");
 const usersRoutes = require("./routes/users");
+const clientsRoutes = require("./routes/clients");
 
 const server = express();
 
 server.use(bodyParser.json());
 server.use(cors());
 
-// server.use("/forms", formsRoutes);
 server.use("/users", usersRoutes);
+server.use("/clients", clientsRoutes);
 
-server.listen(8000, () => console.log("Server for course is started..."));
+server.listen(8000, () => console.log("Server for appForm has started"));

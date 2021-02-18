@@ -1,27 +1,26 @@
-// const { formsData } = require("./forms");
 const Login = require("../models/login");
 
-const usersData = [
-  {
-    accessLevel: 1,
-    // courses: [coursesData.map((course) => course.id)],
-    login: "",
-    password: "",
-  },
-];
+const usersData = {
+  accessLevel: true,
+  login: "",
+  password: "",
+};
+
+const getData = (req, res, next) => {
+  Login.find({}, (err, data) => {
+    usersData.login = data[0].login;
+    usersData.password = data[0].password;
+  });
+};
+getData();
 
 exports.postUser = (request, response, next) => {
   try {
     const { login, password } = request.body;
 
-    Login.find({}, (err, data) => {
-      usersData.login = data[0].login;
-      usersData.password = data[0].password;
-      console.log(usersData.login, usersData.password);
-    });
+    const user = usersData.accessLevel;
 
-    const user = usersData.find((u) => u.login === login);
-    if (!user) {
+    if (usersData.login !== login) {
       response.status(404).json({
         message: "Użytkownik o podanym loginie nie istnieje",
       });
@@ -29,7 +28,7 @@ exports.postUser = (request, response, next) => {
       return;
     }
 
-    const isPasswordCorrect = user.password === password;
+    const isPasswordCorrect = usersData.password === password;
     if (!isPasswordCorrect) {
       response.status(401).json({
         message: "Hasło lub login się nie zgadza",
