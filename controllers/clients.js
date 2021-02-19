@@ -1,5 +1,5 @@
 const { v4: uuid } = require("uuid");
-// const Client = require("../models/client");
+const Client = require("../models/client.js");
 
 // new Admin({ login: "...", password: "... }).save();
 
@@ -21,6 +21,7 @@ const { v4: uuid } = require("uuid");
 
 const clientsData = [
   {
+    id: 000000,
     companyName: "test",
     companyAdress: "testowy 22, 00-00 Test",
     vatNo: "PL1231231223",
@@ -45,7 +46,7 @@ exports.getClients = (request, response, next) => {
 
 exports.getClient = (request, response, next) => {
   try {
-    const { vat } = request.params;
+    const { vatNo } = request.params;
     const clientToSend = clientsData.find((client) => client.vatNo === vatNo);
 
     if (!clientToSend) {
@@ -69,47 +70,18 @@ exports.getClient = (request, response, next) => {
 };
 
 exports.postClient = (request, response, next) => {
-  try {
-    const { companyName, companyAdress, vatNo, eMail, info } = request.body;
-    if (!companyName || !companyAdress || !vatNo || !eMail) {
-      response.status(400).json({
-        message: "Nie podano wszystkich wymaganych informacji",
-      });
+  const body = request.body;
+  const newClient = new Client(body);
 
+  newClient.save((err) => {
+    if (err) {
+      console.log(body, err);
       return;
     }
-
-    const isClientExist = Client.some(
-      ({ vatNo: currentVatNo }) => currentVatNo === vatNo
-    );
-    if (isClientExist) {
-      response.status(409).json({
-        message: `Klient o podanym numerze nip: ${title} istnieje w bazei danych`,
-      });
-
-      return;
-    }
-
-    const newCourse = {
-      id: uuid(),
-      companyName,
-      companyAdress,
-      eMail,
-      info,
-    };
-
-    clientsData.push(newCourse);
-
     response.status(201).json({
-      clients: clientsData,
+      clients: "OK",
     });
-  } catch (error) {
-    response.status(500).json({
-      error,
-      message:
-        "Oops! Coś poszło nie tak, przy metodzie POST w endpointcie /courses",
-    });
-  }
+  });
 };
 
 exports.putClient = (request, response, next) => {
@@ -143,7 +115,7 @@ exports.putClient = (request, response, next) => {
     response.status(500).json({
       error,
       message:
-        "Oops! Coś poszło nie tak, przy metodzie PUT w endpointcie /courses",
+        "Oops! Coś poszło nie tak, przy metodzie PUT w endpointcie /clients",
     });
   }
 };
@@ -171,7 +143,7 @@ exports.deleteClient = (request, response, next) => {
     response.status(500).json({
       error,
       message:
-        "Oops! Coś poszło nie tak, przy metodzie DELETE w endpointcie /courses/:id",
+        "Oops! Coś poszło nie tak, przy metodzie DELETE w endpointcie /clients/:vatNo",
     });
   }
 };
