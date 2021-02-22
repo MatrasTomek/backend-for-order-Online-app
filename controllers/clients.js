@@ -99,22 +99,13 @@ exports.postClient = (request, response, next) => {
 
 exports.deleteClient = (request, response, next) => {
   try {
-    const findClients = Client.find();
-    findClients.exec((err, data) => {
-      const { vatNo } = request.params;
-      const indexClientToDelete = Client.findIndex(
-        (client) => client.vatNo === vatNo
-      );
-
-      if (indexClientToDelete === -1) {
+    Client.findByIdAndDelete(request.params.id, (err) => {
+      if (err) {
         response.status(404).json({
-          message: "Nie znaleziono klienta o podanym numerze nip",
+          message: "Nie znaleziono klienta o podanym id",
         });
-
         return;
       }
-
-      clientsData.splice(indexClientToDelete, 1);
       response.status(200).end();
     });
   } catch (error) {
@@ -127,3 +118,7 @@ exports.deleteClient = (request, response, next) => {
 };
 
 // exports.clientsData = clientsData;
+// const findClients = Client.find();
+// findClients.exec((err, data) => {
+//   console.log(data);
+// });
