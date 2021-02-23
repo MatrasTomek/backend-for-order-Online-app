@@ -2,7 +2,6 @@ const { v4: uuid } = require("uuid");
 const Client = require("../models/client.js");
 
 // get all clients from DB
-
 exports.getClients = (request, response, next) => {
   try {
     const findClients = Client.find();
@@ -20,30 +19,31 @@ exports.getClients = (request, response, next) => {
   }
 };
 
-// exports.getClient = (request, response, next) => {
-//   try {
-//     const { vatNo } = request.params;
-//     const clientToSend = clientsData.find((client) => client.vatNo === vatNo);
+// get one client from DB by vatNo
+exports.getClient = (request, response, next) => {
+  try {
+    const { vatNo } = request.params;
 
-//     if (!clientToSend) {
-//       response.status(404).json({
-//         message: "Nie znaleziono klienta o podanym numerze nip",
-//       });
-
-//       return;
-//     }
-
-//     response.status(200).json({
-//       client: clientToSend,
-//     });
-//   } catch (error) {
-//     response.status(500).json({
-//       error,
-//       message:
-//         "Oops! Coś poszło nie tak, przy metodzie GET w endpointcie /courses/:id",
-//     });
-//   }
-// };
+    const findClient = Client.find({ vatNo: vatNo });
+    findClient.exec((err, data) => {
+      if (data.length === 0 || data === null) {
+        response.status(404).json({
+          message: "Nie znaleziono klienta o numerze nip:",
+        });
+        return;
+      }
+      response.status(200).json({
+        client: data,
+      });
+    });
+  } catch (error) {
+    response.status(500).json({
+      error,
+      message:
+        "Oops! Coś poszło nie tak, przy metodzie GET w endpointcie /clients/:vatNo",
+    });
+  }
+};
 
 // add cleint to DB from addClientFrom
 exports.postClient = (request, response, next) => {
