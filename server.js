@@ -8,6 +8,7 @@ const mongoose = require("mongoose");
 mongoose.connect(config.db, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  useFindAndModify: false,
 });
 
 const usersRoutes = require("./routes/users");

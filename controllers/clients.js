@@ -1,4 +1,3 @@
-const { v4: uuid } = require("uuid");
 const Client = require("../models/client.js");
 
 // get all clients from DB
@@ -45,58 +44,62 @@ exports.getClient = (request, response, next) => {
   }
 };
 
-// add cleint to DB from addClientFrom
+// add client to DB from addClientFrom
 exports.postClient = (request, response, next) => {
   const body = request.body;
   const newClient = new Client(body);
 
-  newClient.save((err) => {
+  newClient.save((err, data) => {
     if (err) {
       console.log(body, err);
       return;
     }
     response.status(201).json({
-      clients: "OK",
+      data,
     });
   });
 };
+// edit and change data of client
+exports.putClient = (request, response, next) => {
+  try {
+    const {
+      clientId,
+      companyName,
+      companyAdress,
+      vatNo,
+      eMail,
+      info,
+    } = request.body;
 
-// exports.putClient = (request, response, next) => {
-//   try {
-//     const { authors, id, price, title } = request.body;
-//     if (!authors || !id || !price || !title) {
-//       response.status(400).json({
-//         message: "Nie podano wszystkich wymaganych informacji",
-//       });
+    const filter = clientId;
+    const update = {
+      companyName,
+      companyAdress,
+      vatNo,
+      eMail,
+      info,
+    };
 
-//       return;
-//     }
-
-//     const indexCourseToUpdate = clientsData.findIndex(
-//       (client) => client.vatNo === vatNo
-//     );
-//     if (indexClientToUpdate === -1) {
-//       response.status(404).json({
-//         message: "Nie znaleziono klienta o podanym numerze nip",
-//       });
-
-//       return;
-//     }
-
-//     clientsData.splice(indexCourseToUpdate, 1, request.body);
-
-//     response.status(202).json({
-//       clients: clientsData,
-//     });
-//   } catch (error) {
-//     response.status(500).json({
-//       error,
-//       message:
-//         "Oops! Coś poszło nie tak, przy metodzie PUT w endpointcie /clients",
-//     });
-//   }
-// };
-
+    Client.findByIdAndUpdate(clientId, update, { new: true }, (err, data) => {
+      if (err) {
+        response.status(404).json({
+          message: "coś poszło nie tak przy ClientUpdate",
+        });
+        return;
+      }
+      response.status(202).json({
+        data,
+      });
+    });
+  } catch (error) {
+    response.status(500).json({
+      error,
+      message:
+        "Oops! Coś poszło nie tak, przy metodzie PUT w endpointcie /clients",
+    });
+  }
+};
+// delete one client by _id
 exports.deleteClient = (request, response, next) => {
   try {
     Client.findByIdAndDelete(request.params.id, (err) => {
@@ -116,9 +119,3 @@ exports.deleteClient = (request, response, next) => {
     });
   }
 };
-
-// exports.clientsData = clientsData;
-// const findClients = Client.find();
-// findClients.exec((err, data) => {
-//   console.log(data);
-// });
