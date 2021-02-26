@@ -46,19 +46,39 @@ exports.getClient = (request, response, next) => {
 
 // add client to DB from addClientFrom
 exports.postClient = (request, response, next) => {
-  const body = request.body;
-  const newClient = new Client(body);
+  try {
+    const body = request.body;
+    const currentVatNo = body.vatNo;
 
-  newClient.save((err, data) => {
-    if (err) {
-      console.log(body, err);
-      return;
-    }
-    response.status(201).json({
-      data,
+    const isClientExist = Client.find({ vatNo: currentVatNo });
+    isClientExist.exec((err, data) => {
+      if (data.length > 0) {
+        response.status(409).json({
+          message: `Klient numerze nip: ${currentVatNo} istnieje w bazie`,
+        });
+        return;
+      }
+      const newClient = new Client(body);
+
+      newClient.save((err, data) => {
+        if (err) {
+          console.log(body, err);
+          return;
+        }
+        response.status(201).json({
+          data,
+        });
+      });
     });
-  });
+  } catch (error) {
+    response.status(500).json({
+      error,
+      message:
+        "Oops! Coś poszło nie tak, przy metodzie POST w endpointcie /clients/",
+    });
+  }
 };
+
 // edit and change data of client
 exports.putClient = (request, response, next) => {
   try {
