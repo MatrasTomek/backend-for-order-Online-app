@@ -1,22 +1,22 @@
 const Order = require("../models/order.js");
 
-// // get all clients from DB
-// exports.getClients = (request, response, next) => {
-//   try {
-//     const findClients = Client.find();
-//     findClients.exec((err, data) => {
-//       response.status(200).json({
-//         data,
-//       });
-//     });
-//   } catch (error) {
-//     response.status(500).json({
-//       error,
-//       message:
-//         "Oops! Coś poszło nie tak, przy metodzie GET w endpointcie /courses",
-//     });
-//   }
-// };
+// get all orders from DB
+exports.getOrders = (request, response, next) => {
+  try {
+    const findOrders = Order.find();
+    findOrders.exec((err, data) => {
+      response.status(200).json({
+        data,
+      });
+    });
+  } catch (error) {
+    response.status(500).json({
+      error,
+      message:
+        "Oops! Coś poszło nie tak, przy metodzie GET w endpointcie /orders",
+    });
+  }
+};
 
 // // get one client from DB by vatNo
 // exports.getClient = (request, response, next) => {

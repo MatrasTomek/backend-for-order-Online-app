@@ -11,6 +11,7 @@ const orderSchema = new Schema({
   carrierVatNo: { type: String, required: true },
   orderLoadDate: { type: String },
   orderLoadHrs: { type: String },
+  orderLoadAdress: { type: String },
   orderUnloadDate: { type: String },
   orderUnloadHrs: { type: String },
   orderUnloadAdress: { type: String },
