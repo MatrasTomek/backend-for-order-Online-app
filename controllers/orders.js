@@ -109,23 +109,23 @@ exports.postOrder = (request, response, next) => {
 //     });
 //   }
 // };
-// // delete one client by _id
-// exports.deleteClient = (request, response, next) => {
-//   try {
-//     Client.findByIdAndDelete(request.params.id, (err) => {
-//       if (err) {
-//         response.status(404).json({
-//           message: "Nie znaleziono klienta o podanym id",
-//         });
-//         return;
-//       }
-//       response.status(200).end();
-//     });
-//   } catch (error) {
-//     response.status(500).json({
-//       error,
-//       message:
-//         "Oops! Coś poszło nie tak, przy metodzie DELETE w endpointcie /clients/:vatNo",
-//     });
-//   }
-// };
+// delete one order by _id
+exports.deleteOrder = (request, response, next) => {
+  try {
+    Order.findByIdAndDelete(request.params.id, (err) => {
+      if (err) {
+        response.status(404).json({
+          message: "Nie znaleziono zlecenia o podanym id",
+        });
+        return;
+      }
+      response.status(200).end();
+    });
+  } catch (error) {
+    response.status(500).json({
+      error,
+      message:
+        "Oops! Coś poszło nie tak, przy metodzie DELETE w endpointcie /orders/:id",
+    });
+  }
+};
