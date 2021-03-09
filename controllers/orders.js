@@ -4,6 +4,7 @@ const Order = require("../models/order.js");
 exports.getOrders = (request, response, next) => {
   try {
     const findOrders = Order.find();
+
     findOrders.exec((err, data) => {
       response.status(200).json({
         data,
