@@ -27,6 +27,12 @@ const orderSchema = new Schema({
   orderInfo: { type: String },
   orderAdr: { type: String },
   orderFix: { type: String },
+  orderClientPrice: { type: String },
+  orderClientCurr: { type: String },
+  orderClientTerms: { type: String },
+  orderCarrierPrice: { type: String },
+  orderCarrierCurr: { type: String },
+  orderCarrierTerms: { type: String },
 });
 
 module.exports = mongoose.model("Order", orderSchema);
