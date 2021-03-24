@@ -4,7 +4,6 @@ const Order = require("../models/order.js");
 exports.getOrders = (request, response, next) => {
   try {
     const findOrders = Order.find();
-
     findOrders.exec((err, data) => {
       response.status(200).json({
         data,
@@ -19,31 +18,33 @@ exports.getOrders = (request, response, next) => {
   }
 };
 
-// // get one client from DB by vatNo
-// exports.getClient = (request, response, next) => {
-//   try {
-//     const { vatNo } = request.params;
+// get one order from DB by search
+exports.getOrder = (request, response, next) => {
+  try {
+    const value = request.params.value;
 
-//     const findClient = Client.find({ vatNo: vatNo });
-//     findClient.exec((err, data) => {
-//       if (data.length === 0 || data === null) {
-//         response.status(404).json({
-//           message: "Nie znaleziono klienta o numerze nip:",
-//         });
-//         return;
-//       }
-//       response.status(200).json({
-//         client: data,
-//       });
-//     });
-//   } catch (error) {
-//     response.status(500).json({
-//       error,
-//       message:
-//         "Oops! Coś poszło nie tak, przy metodzie GET w endpointcie /clients/:vatNo",
-//     });
-//   }
-// };
+    const findOrder = Order.find({
+      orderNumber: new RegExp(value, "i"),
+    });
+    findOrder.exec((err, data) => {
+      if (data.length === 0 || data === null) {
+        response.status(404).json({
+          message: "Nie znaleziono zlecenie o takim numerze:",
+        });
+        return;
+      }
+      response.status(200).json({
+        data,
+      });
+    });
+  } catch (error) {
+    response.status(500).json({
+      error,
+      message:
+        "Oops! Coś poszło nie tak, przy metodzie GET w endpointcie /orders/search",
+    });
+  }
+};
 
 // // add client to DB from addClientFrom
 exports.postOrder = (request, response, next) => {
