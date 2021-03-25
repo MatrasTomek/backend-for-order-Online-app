@@ -51,8 +51,6 @@ exports.getClientByName = (request, response, next) => {
   try {
     const { companyName } = request.params;
 
-    console.log(request.params);
-
     const findClient = Client.find({
       companyName: new RegExp(companyName, "i"),
     });

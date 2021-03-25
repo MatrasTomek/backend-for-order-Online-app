@@ -29,7 +29,7 @@ exports.getOrder = (request, response, next) => {
     findOrder.exec((err, data) => {
       if (data.length === 0 || data === null) {
         response.status(404).json({
-          message: "Nie znaleziono zlecenie o takim numerze:",
+          message: "Nie ma zlecenia o takim numerze",
         });
         return;
       }
@@ -71,46 +71,93 @@ exports.postOrder = (request, response, next) => {
   }
 };
 
-// // edit and change data of client
-// exports.putClient = (request, response, next) => {
-//   try {
-//     const {
-//       clientId,
-//       companyName,
-//       companyAdress,
-//       vatNo,
-//       eMail,
-//       info,
-//     } = request.body;
+// edit and change data of order
+exports.putOrder = (request, response, next) => {
+  try {
+    const {
+      carrierAdress,
+      carrierName,
+      carrierVatNo,
+      clientAdress,
+      clientName,
+      clientVatNo,
+      orderAdr,
+      orderCarrierCurr,
+      orderCarrierPrice,
+      orderCarrierTerms,
+      orderClientCurr,
+      orderClientPrice,
+      orderClientTerms,
+      orderDriver,
+      orderFix,
+      orderLoadAdress,
+      orderLoadCity,
+      orderLoadCountry,
+      orderLoadDate,
+      orderLoadHrs,
+      orderLoadZip,
+      orderTruck,
+      orderUnloadAdress,
+      orderUnloadCity,
+      orderUnloadCountry,
+      orderUnloadDate,
+      orderUnloadHrs,
+      orderUnloadZip,
+      orderNumber,
+    } = request.body;
 
-//     const filter = clientId;
-//     const update = {
-//       companyName,
-//       companyAdress,
-//       vatNo,
-//       eMail,
-//       info,
-//     };
+    const filter = orderNumber;
+    const update = {
+      carrierAdress,
+      carrierName,
+      carrierVatNo,
+      clientAdress,
+      clientName,
+      clientVatNo,
+      orderAdr,
+      orderCarrierCurr,
+      orderCarrierPrice,
+      orderCarrierTerms,
+      orderClientCurr,
+      orderClientPrice,
+      orderClientTerms,
+      orderDriver,
+      orderFix,
+      orderLoadAdress,
+      orderLoadCity,
+      orderLoadCountry,
+      orderLoadDate,
+      orderLoadHrs,
+      orderLoadZip,
+      orderTruck,
+      orderUnloadAdress,
+      orderUnloadCity,
+      orderUnloadCountry,
+      orderUnloadDate,
+      orderUnloadHrs,
+      orderUnloadZip,
+    };
 
-//     Client.findByIdAndUpdate(clientId, update, { new: true }, (err, data) => {
-//       if (err) {
-//         response.status(404).json({
-//           message: "coś poszło nie tak przy ClientUpdate",
-//         });
-//         return;
-//       }
-//       response.status(202).json({
-//         data,
-//       });
-//     });
-//   } catch (error) {
-//     response.status(500).json({
-//       error,
-//       message:
-//         "Oops! Coś poszło nie tak, przy metodzie PUT w endpointcie /clients",
-//     });
-//   }
-// };
+    Order.findByIdAndUpdate(filter, update, { new: true }, (err, data) => {
+      if (err) {
+        response.status(404).json({
+          message: "coś poszło nie tak przy OrderUpdate",
+        });
+        return;
+      }
+      response.status(202).json({
+        data,
+      });
+    });
+  } catch (error) {
+    response.status(500).json({
+      error,
+      message:
+        "Oops! Coś poszło nie tak, przy metodzie PUT w endpointcie /order",
+    });
+  }
+};
+
 // delete one order by _id
 exports.deleteOrder = (request, response, next) => {
   try {
