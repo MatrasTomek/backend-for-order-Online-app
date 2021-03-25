@@ -19,15 +19,17 @@ exports.getClients = (request, response, next) => {
 };
 
 // get one client from DB by vatNo
-exports.getClient = (request, response, next) => {
+exports.getClientByVat = (request, response, next) => {
   try {
     const { vatNo } = request.params;
 
-    const findClient = Client.find({ vatNo: vatNo });
+    const findClient = Client.find({
+      vatNo: new RegExp(vatNo, "i"),
+    });
     findClient.exec((err, data) => {
       if (data.length === 0 || data === null) {
         response.status(404).json({
-          message: "Nie znaleziono klienta o numerze nip:",
+          message: "Nie znaleziono klienta",
         });
         return;
       }
@@ -40,6 +42,36 @@ exports.getClient = (request, response, next) => {
       error,
       message:
         "Oops! Coś poszło nie tak, przy metodzie GET w endpointcie /clients/:vatNo",
+    });
+  }
+};
+
+// get one client from DB by companyName
+exports.getClientByName = (request, response, next) => {
+  try {
+    const { companyName } = request.params;
+
+    console.log(request.params);
+
+    const findClient = Client.find({
+      companyName: new RegExp(companyName, "i"),
+    });
+    findClient.exec((err, data) => {
+      if (data.length === 0 || data === null) {
+        response.status(404).json({
+          message: "Nie znaleziono klienta:",
+        });
+        return;
+      }
+      response.status(200).json({
+        client: data,
+      });
+    });
+  } catch (error) {
+    response.status(500).json({
+      error,
+      message:
+        "Oops! Coś poszło nie tak, przy metodzie GET w endpointcie /clients/:name",
     });
   }
 };
