@@ -2,9 +2,10 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "express-server for appForm",
-  "main": "server.js",
+  "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "node ./bin/www",
+    "test": "nodemon app.js"
   },
   "author": "DawidWebb",
   "license": "ISC",
