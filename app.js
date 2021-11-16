@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const config = require("./config");
+const config = require("./_config");
 const mongoose = require("mongoose");
 
 //* mongoose conect *//
@@ -16,14 +16,16 @@ const clientsRoutes = require("./routes/clients");
 const ordersRoutes = require("./routes/orders");
 const orderNumberRoutes = require("./routes/orderNumber");
 
-const server = express();
+const app = express();
 
-server.use(bodyParser.json());
-server.use(cors());
+app.use(bodyParser.json());
+app.use(cors());
 
-server.use("/users", usersRoutes);
-server.use("/clients", clientsRoutes);
-server.use("/orders", ordersRoutes);
-server.use("/ordernumber", orderNumberRoutes);
+app.use("/users", usersRoutes);
+app.use("/clients", clientsRoutes);
+app.use("/orders", ordersRoutes);
+app.use("/ordernumber", orderNumberRoutes);
 
-server.listen(8000, () => console.log("Server for appForm has started"));
+app.listen(9000, () => console.log("Server for appForm has started"));
+
+module.exports = app;

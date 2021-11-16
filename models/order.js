@@ -24,7 +24,7 @@ const orderSchema = new Schema({
   orderGoodsSpecyfications: { type: String },
   orderDriver: { type: String },
   orderTruck: { type: String },
-  orderInfo: { type: String },
+  orderID: { type: String },
   orderAdr: { type: String },
   orderFix: { type: String },
   orderClientPrice: { type: String },
