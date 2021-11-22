@@ -46,7 +46,7 @@ exports.getOrder = (request, response, next) => {
   }
 };
 
-// // add client to DB from addClientFrom
+// // add order to DB from addClientFrom
 exports.postOrder = (request, response, next) => {
   try {
     const body = request.body;
@@ -90,6 +90,8 @@ exports.putOrder = (request, response, next) => {
       orderClientTerms,
       orderDriver,
       orderFix,
+      orderWeight,
+      orderID,
       orderLoadAdress,
       orderLoadCity,
       orderLoadCountry,
@@ -123,6 +125,8 @@ exports.putOrder = (request, response, next) => {
       orderClientTerms,
       orderDriver,
       orderFix,
+      orderWeight,
+      orderID,
       orderLoadAdress,
       orderLoadCity,
       orderLoadCountry,
